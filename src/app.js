@@ -55,7 +55,7 @@ app.delete("/repositories/:id", (req, res) => {
   }
   const project = repositories[repositoryIndex];
   repositories.splice(repositoryIndex, 1);
-  return res.json({message: "Repositório Deletado"});
+  return res.status(204);
   // TODO
 });
 
