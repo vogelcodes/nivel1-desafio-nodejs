@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const {uuid} = require("uuidv4");
 
 // const { uuid } = require("uuidv4");
 
@@ -11,23 +12,64 @@ app.use(cors());
 const repositories = [];
 
 app.get("/repositories", (request, response) => {
-  // TODO
+  return response.json({repositories});
 });
 
 app.post("/repositories", (request, response) => {
-  // TODO
+  const { url, name, techs } = request.body;
+  const repo = {
+    id: uuid(),
+    name, url, techs, likes: 0
+  }
+  repositories.push(repo);
+  return response.json(repo);
 });
 
 app.put("/repositories/:id", (request, response) => {
+  const {id} = request.params;
+  const {name, url, techs } = request.body;
+  const repositoryIndex = repositories.findIndex(repo => repo.id === id);
+  console.log(repositoryIndex);
+  if (repositoryIndex < 0){
+    return response.status(401).json({error: "Repositorio Inexistente"});
+  }
+  const project = repositories[repositoryIndex];
+
+  const updatedProject = {
+    id,
+    name,
+    url,
+    techs,
+    likes: project.likes
+  }
+  repositories[repositoryIndex] = updatedProject;
+  return response.json(updatedProject);
+
+});
+
+app.delete("/repositories/:id", (req, res) => {
+  const { id } = req.params;
+  const repositoryIndex = repositories.findIndex(repo => repo.id === id);
+  if (repositoryIndex < 0){
+    return res.status(401).json({error: "Repositorio Inexistente"});
+  }
+  const project = repositories[repositoryIndex];
+  repositories.splice(repositoryIndex, 1);
+  return res.json({message: "Repositório Deletado"});
   // TODO
 });
 
-app.delete("/repositories/:id", (request, response) => {
-  // TODO
-});
+app.post("/repositories/:id/like", (req, res) => {
+const {id} = req.params;
+const repositoryIndex = repositories.findIndex(repo => repo.id === id);
+if (repositoryIndex < 0){
+  return res.status(401).json({error: "Repositorio Inexistente"});
+}
+const project = repositories[repositoryIndex];
+project.likes++;
+return res.json(project);
 
-app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+
 });
 
 module.exports = app;
