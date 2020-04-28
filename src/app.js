@@ -31,7 +31,7 @@ app.put("/repositories/:id", (request, response) => {
   const repositoryIndex = repositories.findIndex(repo => repo.id === id);
   console.log(repositoryIndex);
   if (repositoryIndex < 0){
-    return response.status(401).json({error: "Repositorio Inexistente"});
+    return response.status(400).json({error: "Repositorio Inexistente"});
   }
   const project = repositories[repositoryIndex];
 
@@ -51,7 +51,7 @@ app.delete("/repositories/:id", (req, res) => {
   const { id } = req.params;
   const repositoryIndex = repositories.findIndex(repo => repo.id === id);
   if (repositoryIndex < 0){
-    return res.status(401).json({error: "Repositorio Inexistente"});
+    return res.status(400).json({error: "Repositorio Inexistente"});
   }
   const project = repositories[repositoryIndex];
   repositories.splice(repositoryIndex, 1);
@@ -63,7 +63,7 @@ app.post("/repositories/:id/like", (req, res) => {
 const {id} = req.params;
 const repositoryIndex = repositories.findIndex(repo => repo.id === id);
 if (repositoryIndex < 0){
-  return res.status(401).json({error: "Repositorio Inexistente"});
+  return res.status(400).json({error: "Repositorio Inexistente"});
 }
 const project = repositories[repositoryIndex];
 project.likes++;
