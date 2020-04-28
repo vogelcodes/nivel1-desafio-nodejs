@@ -12,7 +12,7 @@ app.use(cors());
 const repositories = [];
 
 app.get("/repositories", (request, response) => {
-  return response.json({repositories});
+  return response.json(repositories);
 });
 
 app.post("/repositories", (request, response) => {
@@ -65,9 +65,8 @@ const repositoryIndex = repositories.findIndex(repo => repo.id === id);
 if (repositoryIndex < 0){
   return res.status(400).json({error: "Repositorio Inexistente"});
 }
-const project = repositories[repositoryIndex];
-project.likes++;
-return res.json(project);
+repositories[repositoryIndex].likes++;
+return res.json(repositories[repositoryIndex]);
 
 
 });
